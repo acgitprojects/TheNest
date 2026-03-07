@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Plus, Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import Nav from '@/components/Nav'
 import ConfirmDialog from '@/components/ConfirmDialog'
 import type { Host } from '@/types'
 
 export default function HostsPage() {
+  const router                       = useRouter()
   const [hosts, setHosts]               = useState<Host[]>([])
   const [loading, setLoading]           = useState(true)
   const [name, setName]                 = useState('')
@@ -18,11 +20,31 @@ export default function HostsPage() {
   const inputRef                        = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    fetch('/api/hosts')
-      .then((r) => r.json())
-      .then(({ data }: { data: Host[] }) => setHosts(data))
-      .finally(() => setLoading(false))
-  }, [])
+    async function loadHosts() {
+      try {
+        const res = await fetch('/api/hosts')
+        const json = await res.json() as { data?: Host[]; error?: string }
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            toast.error('請先登入')
+            router.push('/login')
+            return
+          }
+          throw new Error(json.error ?? '無法載入主持人列表')
+        }
+
+        setHosts(Array.isArray(json.data) ? json.data : [])
+      } catch (err: unknown) {
+        setHosts([])
+        toast.error(err instanceof Error ? err.message : '無法載入主持人列表')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadHosts()
+  }, [router])
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault()

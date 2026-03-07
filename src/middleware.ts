@@ -36,6 +36,7 @@ export const config = {
   matcher: [
     '/calendar/:path*',
     '/logbook/:path*',
+    '/hosts/:path*',
     '/confirmation/:path*',
     '/api/bookings/:path*',
     '/api/hosts/:path*',
