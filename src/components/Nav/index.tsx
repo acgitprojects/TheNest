@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { CalendarDays, BookOpen, LogOut } from 'lucide-react'
+import { CalendarDays, BookOpen, Users, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { SITE_NAME } from '@/lib/constants'
 import toast from 'react-hot-toast'
@@ -21,6 +21,7 @@ export default function Nav() {
   const links = [
     { href: '/calendar', label: '預訂日曆', icon: CalendarDays },
     { href: '/logbook',  label: '預訂記錄', icon: BookOpen },
+    { href: '/hosts',    label: '主持人',   icon: Users },
   ]
 
   return (
