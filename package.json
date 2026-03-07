@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "[ -f next.config.ts ] && rm -f next.config.ts || true",
+    "prestart": "[ -f next.config.ts ] && rm -f next.config.ts || true",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
+    "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate"
   },
@@ -35,12 +37,13 @@
     "eslint-config-next": "^14.2.4",
     "prisma": "^5.14.0",
     "ts-node": "^10.9.2",
+    "tsx": "^4.11.0",
     "typescript": "^5.4.5",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   }
 }
