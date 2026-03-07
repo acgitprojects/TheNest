@@ -28,8 +28,8 @@ if [ ! -f ".env.local" ]; then
   # Generate session secret
   SESSION_SECRET=$(openssl rand -base64 32)
 
-  # Generate bcrypt hash of the PIN (sf576)
-  PIN_HASH=$(node -e "const b=require('bcryptjs');console.log(b.hashSync('sf576',12))")
+  # Generate bcrypt hash of the PIN (576)
+  PIN_HASH=$(node -e "const b=require('bcryptjs');console.log(b.hashSync('576',12))")
 
   cat > .env.local << EOF
 # PostgreSQL — update with your Tencent Cloud connection string
@@ -38,7 +38,7 @@ DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/thenest"
 # Session secret (auto-generated)
 SESSION_SECRET="${SESSION_SECRET}"
 
-# Admin PIN hash (auto-generated for PIN: sf576)
+# Admin PIN hash (auto-generated for PIN: 576)
 ADMIN_PIN_HASH="${PIN_HASH}"
 EOF
 
