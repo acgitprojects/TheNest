@@ -8,6 +8,7 @@ import Nav from '@/components/Nav'
 import CalendarGrid from '@/components/Calendar/CalendarGrid'
 import DayModal from '@/components/Calendar/DayModal'
 import BookingForm from '@/components/Calendar/BookingForm'
+import { HOSTS_FALLBACK } from '@/lib/constants'
 import type { Booking, Host, CreateBookingPayload } from '@/types'
 
 type ModalStep = 'day' | 'form' | null
@@ -15,7 +16,7 @@ type ModalStep = 'day' | 'form' | null
 export default function CalendarPage() {
   const router = useRouter()
 
-  const [hosts, setHosts]               = useState<Host[]>([])
+  const [hosts, setHosts]               = useState<Host[]>(HOSTS_FALLBACK)
   const [allBookings, setAllBookings]   = useState<Booking[]>([])
   const [daySlots, setDaySlots]         = useState<Parameters<typeof DayModal>[0]['slots']>([])
   const [loadingSlots, setLoadingSlots] = useState(false)
@@ -32,7 +33,7 @@ export default function CalendarPage() {
       ])
       if (hostsRes.ok) {
         const { data } = await hostsRes.json() as { data: Host[] }
-        setHosts(data)
+        if (data && data.length > 0) setHosts(data)
       }
       if (bookingsRes.ok) {
         const { data } = await bookingsRes.json() as { data: Booking[] }
