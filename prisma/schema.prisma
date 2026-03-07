@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Host {
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(100)
+  bookings Booking[]
+}
+
+model AdminConfig {
+  id        Int      @id @default(autoincrement())
+  pinHash   String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+}
+
+model Booking {
+  id        Int           @id @default(autoincrement())
+  eventName String        @db.VarChar(255)
+  host      Host          @relation(fields: [hostId], references: [id])
+  hostId    Int
+  status    BookingStatus
+  slots     BookingSlot[]
+  createdAt DateTime      @default(now())
+}
+
+model BookingSlot {
+  id        Int      @id @default(autoincrement())
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId Int
+  slotDate  DateTime @db.Date
+  slotHour  Int      // 0–23
+
+  @@unique([slotDate, slotHour])
+}
+
+enum BookingStatus {
+  open
+  close
+}
