@@ -8,6 +8,7 @@ import { BookOpen, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Nav from '@/components/Nav'
 import ConfirmDialog from '@/components/ConfirmDialog'
+import BookingDetailModal from '@/components/BookingDetailModal'
 import { cn, formatHourRange } from '@/lib/utils'
 import type { Booking } from '@/types'
 
@@ -16,6 +17,7 @@ export default function LogbookPage() {
   const [loading, setLoading]             = useState(true)
   const [cancelTarget, setCancelTarget]   = useState<number | null>(null)
   const [cancelling, setCancelling]       = useState(false)
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null)
 
   useEffect(() => {
     fetch('/api/bookings')
@@ -93,7 +95,8 @@ export default function LogbookPage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -20, height: 0, marginBottom: 0 }}
                     transition={{ delay: idx * 0.04, duration: 0.25 }}
-                    className="bg-surface rounded-card shadow-card p-4 flex items-start justify-between gap-3"
+                    className="bg-surface rounded-card shadow-card p-4 flex items-start justify-between gap-3 cursor-pointer hover:shadow-warm-md transition-all active:scale-[0.98]"
+                    onClick={() => setSelectedBooking(booking)}
                   >
                     {/* Left info */}
                     <div className="flex-1 min-w-0">
@@ -133,7 +136,10 @@ export default function LogbookPage() {
 
                     {/* Cancel button */}
                     <button
-                      onClick={() => setCancelTarget(booking.id)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setCancelTarget(booking.id)
+                      }}
                       className="shrink-0 p-2 rounded-input text-muted hover:text-primary hover:bg-booked-bg transition-colors"
                       title="取消預訂"
                     >
@@ -146,6 +152,13 @@ export default function LogbookPage() {
           </div>
         )}
       </main>
+
+      {/* Booking detail modal */}
+      <BookingDetailModal
+        booking={selectedBooking}
+        open={selectedBooking !== null}
+        onClose={() => setSelectedBooking(null)}
+      />
 
       {/* Cancel confirmation */}
       <ConfirmDialog
