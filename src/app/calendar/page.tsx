@@ -43,14 +43,12 @@ export default function CalendarPage() {
     load()
   }, [])
 
-  // Derive booked dates for calendar dots
-  const bookedDates = Array.from(
-    new Set(
-      allBookings.flatMap((b) =>
-        b.slots.map((s) => s.slotDate.split('T')[0])
-      )
-    )
-  )
+  // Derive booked dates map (date -> booking count) for calendar dots
+  const bookedDates = allBookings.reduce<Record<string, number>>((acc, b) => {
+    const dateStr = b.slots[0]?.slotDate.split('T')[0]
+    if (dateStr) acc[dateStr] = (acc[dateStr] ?? 0) + 1
+    return acc
+  }, {})
 
   // Load slots for a specific date
   const loadDaySlots = useCallback(async (date: Date) => {

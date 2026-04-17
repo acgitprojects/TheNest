@@ -12,14 +12,14 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface CalendarGridProps {
-  bookedDates: string[]       // "YYYY-MM-DD" strings that have at least 1 booking
+  bookedDates: Record<string, number>  // "YYYY-MM-DD" -> booking count
   onDayClick: (date: Date) => void
 }
 
 export default function CalendarGrid({ bookedDates, onDayClick }: CalendarGridProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
 
-  const bookedSet = new Set(bookedDates)
+  const bookedSet = new Set(Object.keys(bookedDates))
 
   const monthStart = startOfMonth(currentMonth)
   const monthEnd   = endOfMonth(currentMonth)
@@ -91,7 +91,8 @@ export default function CalendarGrid({ bookedDates, onDayClick }: CalendarGridPr
           const dateStr  = format(day, 'yyyy-MM-dd')
           const inMonth  = isSameMonth(day, currentMonth)
           const isNow    = isToday(day)
-          const hasEvent = bookedSet.has(dateStr)
+          const count    = bookedDates[dateStr] ?? 0
+          const hasEvent = count > 0
 
           return (
             <button
@@ -118,9 +119,24 @@ export default function CalendarGrid({ bookedDates, onDayClick }: CalendarGridPr
                 {format(day, 'd')}
               </span>
 
-              {/* Booking indicator dot */}
+              {/* Booking indicator */}
               {hasEvent && (
-                <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-gold" />
+                <span className="mt-0.5 flex items-center gap-px">
+                  {count === 1 ? (
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                  ) : count === 2 ? (
+                    <>
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                    </>
+                  ) : (
+                    <>
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold/60" />
+                    </>
+                  )}
+                </span>
               )}
             </button>
           )
@@ -134,8 +150,17 @@ export default function CalendarGrid({ bookedDates, onDayClick }: CalendarGridPr
           今日
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+          <span className="flex gap-px">
+            <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+          </span>
           已有預訂
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="flex gap-px">
+            <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+            <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+          </span>
+          多於一個預訂
         </span>
       </div>
     </div>
