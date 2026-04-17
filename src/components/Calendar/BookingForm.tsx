@@ -82,8 +82,9 @@ export default function BookingForm({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
           transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+          onClick={onClose}
         >
-          <div className="bg-surface rounded-t-card md:rounded-card shadow-warm-lg w-full md:max-w-md p-6">
+          <div className="bg-surface rounded-t-card md:rounded-card shadow-warm-lg w-full md:max-w-md p-6" onClick={(e) => e.stopPropagation()}>
             {/* Header */}
             <div className="flex items-center justify-between mb-5">
               <div>

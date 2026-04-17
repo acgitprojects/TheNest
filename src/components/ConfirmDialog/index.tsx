@@ -55,8 +55,9 @@ export default function ConfirmDialog({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.92 }}
             transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+            onClick={onCancel}
           >
-            <div className="bg-surface rounded-card shadow-warm-lg p-6 w-full max-w-sm">
+            <div className="bg-surface rounded-card shadow-warm-lg p-6 w-full max-w-sm" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-start gap-3 mb-4">
                 {danger && (
                   <div className="shrink-0 w-9 h-9 rounded-full bg-booked-bg flex items-center justify-center">

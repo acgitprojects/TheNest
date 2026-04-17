@@ -82,8 +82,9 @@ export default function BookingDetailModal({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.92 }}
             transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+            onClick={onClose}
           >
-            <div className="bg-surface rounded-card shadow-warm-lg p-6 w-full max-w-sm max-h-[80vh] overflow-y-auto">
+            <div className="bg-surface rounded-card shadow-warm-lg p-6 w-full max-w-sm max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <h2 className="font-semibold text-text-main text-lg">預訂詳情</h2>

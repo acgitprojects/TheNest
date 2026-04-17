@@ -115,8 +115,9 @@ export default function EditBookingModal({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+            onClick={onClose}
           >
-            <div className="bg-surface rounded-t-card md:rounded-card shadow-warm-lg w-full md:max-w-md max-h-[92vh] overflow-y-auto">
+            <div className="bg-surface rounded-t-card md:rounded-card shadow-warm-lg w-full md:max-w-md max-h-[92vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <div className="p-6">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-5">

@@ -77,8 +77,9 @@ export default function DayModal({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+            onClick={onClose}
           >
-            <div className="bg-surface rounded-t-card md:rounded-card shadow-warm-lg w-full md:max-w-lg max-h-[92vh] flex flex-col">
+            <div className="bg-surface rounded-t-card md:rounded-card shadow-warm-lg w-full md:max-w-lg max-h-[92vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
 
               {/* Header */}
               <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gold/20 shrink-0">
