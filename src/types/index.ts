@@ -30,6 +30,14 @@ export interface CreateBookingPayload {
   hours: number[] // e.g. [14, 15, 18]
 }
 
+export interface UpdateBookingPayload {
+  eventName: string
+  hostId: number
+  status: BookingStatus
+  date: string   // "YYYY-MM-DD"
+  hours: number[]
+}
+
 export interface ApiResponse<T> {
   data?: T
   error?: string

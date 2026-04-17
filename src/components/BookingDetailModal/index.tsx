@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Copy, CheckCheck, X } from 'lucide-react'
+import { Copy, CheckCheck, X, Pencil } from 'lucide-react'
 import { format } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
 import { cn, formatHourRange } from '@/lib/utils'
@@ -13,12 +13,14 @@ interface BookingDetailModalProps {
   booking: Booking | null
   open: boolean
   onClose: () => void
+  onEdit?: (booking: Booking) => void
 }
 
 export default function BookingDetailModal({
   booking,
   open,
   onClose,
+  onEdit,
 }: BookingDetailModalProps) {
   const [copied, setCopied] = useState(false)
 
@@ -125,6 +127,17 @@ export default function BookingDetailModal({
                   </span>
                 </div>
               </div>
+
+              {/* Edit Button */}
+              {onEdit && (
+                <button
+                  onClick={() => onEdit(booking)}
+                  className="w-full mb-2 py-2.5 px-4 rounded-input font-medium text-sm flex items-center justify-center gap-2 transition-all duration-150 active:scale-95 bg-bg hover:bg-gold-light border border-gold/30 text-text-main"
+                >
+                  <Pencil size={16} />
+                  編輯活動
+                </button>
+              )}
 
               {/* Regenerate Invitation Button */}
               <button

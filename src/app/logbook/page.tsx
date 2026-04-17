@@ -9,22 +9,39 @@ import toast from 'react-hot-toast'
 import Nav from '@/components/Nav'
 import ConfirmDialog from '@/components/ConfirmDialog'
 import BookingDetailModal from '@/components/BookingDetailModal'
+import EditBookingModal from '@/components/EditBookingModal'
 import { cn, formatHourRange } from '@/lib/utils'
-import type { Booking } from '@/types'
+import type { Booking, Host } from '@/types'
 
 export default function LogbookPage() {
   const [bookings, setBookings]           = useState<Booking[]>([])
+  const [hosts, setHosts]                 = useState<Host[]>([])
   const [loading, setLoading]             = useState(true)
   const [cancelTarget, setCancelTarget]   = useState<number | null>(null)
   const [cancelling, setCancelling]       = useState(false)
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null)
+  const [editingBooking, setEditingBooking]   = useState<Booking | null>(null)
 
   useEffect(() => {
-    fetch('/api/bookings')
-      .then((r) => r.json())
-      .then(({ data }: { data: Booking[] }) => setBookings(data))
-      .finally(() => setLoading(false))
+    Promise.all([
+      fetch('/api/bookings').then((r) => r.json()),
+      fetch('/api/hosts').then((r) => r.json()),
+    ]).then(([bookingsRes, hostsRes]: [{ data: Booking[] }, { data: Host[] }]) => {
+      setBookings(bookingsRes.data)
+      setHosts(hostsRes.data)
+    }).finally(() => setLoading(false))
   }, [])
+
+  function handleEditBooking(booking: Booking) {
+    setSelectedBooking(null)
+    setEditingBooking(booking)
+  }
+
+  function handleEditSaved(updated: Booking) {
+    setBookings((prev) => prev.map((b) => b.id === updated.id ? updated : b))
+    setEditingBooking(null)
+    toast.success('預訂已更新')
+  }
 
   async function handleConfirmCancel() {
     if (!cancelTarget) return
@@ -158,6 +175,16 @@ export default function LogbookPage() {
         booking={selectedBooking}
         open={selectedBooking !== null}
         onClose={() => setSelectedBooking(null)}
+        onEdit={handleEditBooking}
+      />
+
+      {/* Edit booking modal */}
+      <EditBookingModal
+        booking={editingBooking}
+        open={editingBooking !== null}
+        hosts={hosts}
+        onClose={() => setEditingBooking(null)}
+        onSaved={handleEditSaved}
       />
 
       {/* Cancel confirmation */}
