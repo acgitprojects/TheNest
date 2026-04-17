@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { format } from 'date-fns'
@@ -41,6 +42,15 @@ export default function DayModal({
   onBook,
   onClose,
 }: DayModalProps) {
+  useEffect(() => {
+    if (!date) return
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [date, onClose])
+
   if (!date) return null
 
   const bookedHourSet = new Set(slots.map((s) => s.slotHour))

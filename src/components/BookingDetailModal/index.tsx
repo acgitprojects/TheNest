@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Copy, CheckCheck, X, Pencil } from 'lucide-react'
 import { format } from 'date-fns'
@@ -23,6 +23,15 @@ export default function BookingDetailModal({
   onEdit,
 }: BookingDetailModalProps) {
   const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [open, onClose])
 
   if (!booking) return null
 

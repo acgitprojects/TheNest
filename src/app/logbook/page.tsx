@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { format } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
-import { BookOpen, Trash2 } from 'lucide-react'
+import { BookOpen, Pencil, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Nav from '@/components/Nav'
 import ConfirmDialog from '@/components/ConfirmDialog'
@@ -151,17 +151,29 @@ export default function LogbookPage() {
                       </p>
                     </div>
 
-                    {/* Cancel button */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setCancelTarget(booking.id)
-                      }}
-                      className="shrink-0 p-2 rounded-input text-muted hover:text-primary hover:bg-booked-bg transition-colors"
-                      title="取消預訂"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    {/* Actions */}
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleEditBooking(booking)
+                        }}
+                        className="p-2 rounded-input text-muted hover:text-gold hover:bg-gold-light transition-colors"
+                        title="編輯預訂"
+                      >
+                        <Pencil size={16} />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setCancelTarget(booking.id)
+                        }}
+                        className="p-2 rounded-input text-muted hover:text-primary hover:bg-booked-bg transition-colors"
+                        title="取消預訂"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </motion.div>
                 )
               })}

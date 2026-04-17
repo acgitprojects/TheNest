@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "deploy": "git push origin main && ssh thenest \"cd /var/www/thenest && git stash && git pull origin main && npm install && npm run build && su - ubuntu -c 'pm2 restart thenest && pm2 save'\"",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",

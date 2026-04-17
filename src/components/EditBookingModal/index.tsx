@@ -31,6 +31,16 @@ export default function EditBookingModal({
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
 
+  // Close on Escape
+  useEffect(() => {
+    if (!open) return
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [open, onClose])
+
   // Sync form fields whenever the target booking changes
   useEffect(() => {
     if (booking) {
